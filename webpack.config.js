@@ -19,14 +19,9 @@ module.exports = {
 
   	module:{
 		loaders:[
-            // {
-            //     test: /\.css$/,
-            //     loader: 'style-loader!css-loader'
-            // },
 	        {
 		        test: /\.less$/,
-		        loaders: ['style-loader', 'css-loader', 'less-loader'],
-		        // include: APP_PATH
+		        loaders: ['style-loader', 'css-loader', 'less-loader']
 		    },
 			{
         		test: /\.jsx?$/,

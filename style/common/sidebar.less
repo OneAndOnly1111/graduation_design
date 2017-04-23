@@ -3,15 +3,16 @@
 	width:220px;
 	height:100%;
 	position:fixed;
+	top:50px;
 	color:#fff;
 
 	.user-panel{
-		height:56px;
+		height:70px;
 		background:#1E282C;
 
 		.user-image{
 			display:inline-block;
-			padding:4px 12px;
+			padding:12px;
 			vertical-align:middle;
 
 			img{
@@ -24,23 +25,30 @@
 	}
 
 	.sidebar-menu{
-		color:#b8c7ce;
 		font-size:13px;
 		li.treeview{
 			a{
 				display:inline-block;
-				min-width:200px;
+				width:200px;
 				padding:15px 0;
 				padding-left:20px;
+				color:#b8c7ce;
+				text-decoration:none;
 				&:hover{
 					background-color:#1E282C;
 					color:#fff;
 					border-left:3px solid @themeColor;
-					min-width:197px;
+					width:197px;
 				}
 				.text{
 					margin-left:12px;
 				}
+			}
+			a.selected{
+				background-color:#1E282C;
+				color:#fff;
+				border-left:3px solid @themeColor;
+				width:197px;
 			}
 		}
 	}
