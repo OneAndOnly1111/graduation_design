@@ -24,6 +24,10 @@ const routes = [
   { 
     path: '/addMessage',
     main: () => <div>addMessage</div>
+  },
+  { 
+    path: '/',
+    main: () => <Login/>
   }
 ]
 
@@ -78,12 +82,12 @@ const Sidebar = () => (
   </Router>
 )
 
+
 class Wrapper extends React.Component {
   render() {
     return (
      <div>
-       <Header/>
-       <Sidebar/>
+        <Login/>
      </div>
     );
   }
