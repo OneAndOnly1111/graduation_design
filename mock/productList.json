@@ -1,98 +1,110 @@
 {
 	"msg":"success",
 	"data":[{
+		"id":109090909,
 		"name":"小米6",
 		"brand":"小米",
 		"price":2499,
-		"shelfTime":"2017-4-19",
+		"shelfTime":"2017/4/19",
 		"cpu":"骁龙835",
 		"ram":"6GB",
 		"rom":"64GB"
 	},{
+		"id":78667110,
 		"name":"小米6",
 		"brand":"小米",
 		"price":2799,
-		"shelfTime":"2017-4-19",
+		"shelfTime":"2017/4/19",
 		"cpu":"骁龙835",
 		"ram":"6GB",
 		"rom":"128GB"
 	},{
+		"id":90847644,
 		"name":"OPPO R9",
 		"brand":"OPPO",
 		"price":2499,
-		"shelfTime":"2017-2-10",
+		"shelfTime":"2017/2/10",
 		"cpu":"骁龙835",
 		"ram":"4GB",
 		"rom":"64GB"
 	},{
+		"id":778349832,
 		"name":"OPPO R9s",
 		"brand":"OPPO",
 		"price":3099,
-		"shelfTime":"2016-4-19",
+		"shelfTime":"2016/4/19",
 		"cpu":"骁龙820",
 		"ram":"6GB",
 		"rom":"64GB"
 	},{
+		"id":778349122,
 		"name":"小米5",
 		"brand":"小米",
 		"price":1599,
-		"shelfTime":"2017-4-19",
+		"shelfTime":"2017/4/19",
 		"cpu":"骁龙820",
 		"ram":"3GB",
 		"rom":"32GB"
 	},{
+		"id":5678999,
 		"name":"Vivo X9",
 		"brand":"vivo",
 		"price":2499,
-		"shelfTime":"2017-4-19",
+		"shelfTime":"2017/4/19",
 		"cpu":"骁龙835",
 		"ram":"6GB",
 		"rom":"64GB"
 	},{
+		"id":16885890,
 		"name":"APPLE 6S",
 		"brand":"APPLE",
 		"price":3999,
-		"shelfTime":"2016-10-20",
+		"shelfTime":"2016/10/20",
 		"cpu":"骁龙835",
 		"ram":"2GB",
 		"rom":"64GB"
 	},{
+		"id":346656090,
 		"name":"华为Mate9",
 		"brand":"HUAWEI",
 		"price":4199,
-		"shelfTime":"2015-4-10",
+		"shelfTime":"2015/4/10",
 		"cpu":"骁龙835",
 		"ram":"6GB",
 		"rom":"128GB"
 	},{
+		"id":109090934,
 		"name":"锤子4",
 		"brand":"锤子",
 		"price":2699,
-		"shelfTime":"2016-5-20",
+		"shelfTime":"2016/5/20",
 		"cpu":"骁龙820",
 		"ram":"4GB",
 		"rom":"31GB"
 	},{
+		"id":34554666,
 		"name":"小米6",
 		"brand":"小米",
 		"price":3099,
-		"shelfTime":"2017-4-19",
+		"shelfTime":"2017/4/19",
 		"cpu":"骁龙835",
 		"ram":"6GB",
 		"rom":"128GB"
 	},{
+		"id":34553432,
 		"name":"华为荣耀8",
 		"brand":"HUAWEI",
 		"price":2199,
-		"shelfTime":"2016-6-18",
+		"shelfTime":"2016/6/18",
 		"cpu":"海思麒麟",
 		"ram":"3GB",
 		"rom":"64GB"
 	},{
+		"id":78798009,
 		"name":"乐视2",
 		"brand":"乐视",
 		"price":2499,
-		"shelfTime":"2015-2-20",
+		"shelfTime":"2015/2/20",
 		"cpu":"骁龙835",
 		"ram":"6GB",
 		"rom":"64GB"

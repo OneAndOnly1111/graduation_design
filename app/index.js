@@ -9,8 +9,9 @@ import ProductList from './productList/productList'
 import ProductMessageAdd from './productManage/productMessageAdd'
 import {BrowserRouter as Router,Route,Link,NavLink,IndexRoute,browserHistory} from 'react-router-dom'
 require('../style/main.less');  
-require('../js/datatables/jquery.dataTables.js')
-
+require('../js/datatables/jquery.dataTables.js');
+require('../node_modules/jquery/dist/jquery.js');
+require('../style/bootstrap/dist/js/bootstrap.js');
 // class Wrapper extends React.Component {
 //   render() {
 //     return (

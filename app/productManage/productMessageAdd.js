@@ -37,11 +37,78 @@ const residences = [{
     }],
   }],
 }];
+
+const productMessage = [{
+  value: 'MI',
+  label: '小米',
+  children: [{
+    value: 'MI5',
+    label: '小米5',
+    children: [{
+      value: '3GB/32GB',
+      label: '3GB/32GB',
+    },{
+      value: '3GB/64GB',
+      label: '3GB/32GB',
+    }],
+  },{
+    value: 'MI6',
+    label: '小米6',
+    children: [{
+      value: '6GB/64GB',
+      label: '6GB/64GB',
+    },{
+      value: '6GB/128GB',
+      label: '6GB/128GB',
+    }],
+  }],
+}, {
+  value: 'iphone',
+  label: 'iphone',
+  children: [{
+    value: 'iphone7',
+    label: 'iphone7',
+    children: [{
+      value: '2GB/64GB',
+      label: '2GB/64GB',
+    }],
+  }],
+}];
 export default class ProductMessageAdd extends React.Component{
-	constructor() {
-	    super();
-	    
-	 }
+	constructor(props) {
+		super(props);
+		this.state={
+			store:[],
+		}
+	}
+	
+
+	handleStoreChange(value,option){
+	 	console.log(value,option);
+	}
+	handleSubmit = (e) => {
+	   e.preventDefault();
+	   var salePerson = this.refs.salePerson.refs.input.value;
+	   var data = {
+	   		salePerson:salePerson,
+	   		store:'',
+	   		productName:'',
+	   		productPrice:'',
+	   		productNumber:1,
+	   		discount:'false',
+	   		saleTime:'',
+	   		payWay:'',
+	   		ageRange:""
+	   };
+	   $.ajax({
+	   		url:"/addSaleMessage.json",
+	   		type:"post",
+	   		data:JSON.stringify(data),
+	   		success:(res)=>{
+	   			console(res);
+	   		}
+	   })
+	}
 
 	render(){
 		const formItemLayout = {
@@ -69,25 +136,30 @@ export default class ProductMessageAdd extends React.Component{
 	        	<Sidebar/>
 	        	<div className="main-content">
 	        		<div className="my-container">
-	        			<Form layout='horizontal'>
-		        			<FormItem {...formItemLayout} label="销售人"><Input/></FormItem>
+	        			<Form layout='horizontal' onSubmit={this.handleSubmit}>
+		        			<FormItem {...formItemLayout} label="销售人"><Input ref='salePerson' onChange={this.handleSalerChange}/></FormItem>
 					        <FormItem {...formItemLayout} label="所属门店">
-						         <Cascader options={residences}/>
+						        <Cascader options={residences} onChange={this.handleStoreChange}/>
 					        </FormItem>
-		        			<FormItem {...formItemLayout} label="商品名称"><Input/></FormItem>
-					        <FormItem {...formItemLayout} label="商品价格">
-					        	<InputNumber defaultValue={1000}
+		        			<FormItem {...formItemLayout} label="售出商品">
+		        				<Cascader options={productMessage}/>
+		        			</FormItem>
+					        <FormItem {...formItemLayout} label="售出价格">
+					        	<InputNumber defaultValue={2000}
       								formatter={value => `$ ${value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}
       								parser={value => value.replace(/\$\s?|(,*)/g, '')}
       							/>
       						</FormItem>
-      						<FormItem {...formItemLayout} label="交易时间"><DatePicker/></FormItem>
-					        <FormItem {...formItemLayout} label="是否折扣">
+      						<FormItem {...formItemLayout} label="售出数量">
+      							<InputNumber min={1} defaultValue={1}/>
+      						</FormItem>
+      						<FormItem {...formItemLayout} label="是否折扣">
 					        	<RadioGroup>
 					              <RadioButton value="yes">是</RadioButton>
 					              <RadioButton value="no">否</RadioButton>
 					            </RadioGroup>
 					        </FormItem>
+      						<FormItem {...formItemLayout} label="交易时间"><DatePicker/></FormItem>
 					        <FormItem {...formItemLayout} label="付款方式">
 					        	<Select placeholder="请选择顾客的支付方式">
 					              <Option value="cash">现金交易</Option>
