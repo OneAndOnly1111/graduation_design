@@ -1,5 +1,7 @@
 import React from "react"
 import $ from "jquery"
+import Header from '../common/header'
+import Sidebar from '../common/sidebar'
 class ProductList extends React.Component{
 
 	constructor(props) {
@@ -64,30 +66,36 @@ class ProductList extends React.Component{
 
 	render(){
 		return(
-			<div className="my-container">
-				<div className="row">
-					<div className="col-xs-12">
-						<div className="box">
-							<div className="box-header">
-								<h4 className="box-title">商品列表</h4>
-								<button className="btn btn-primary btn-add">新 增</button>
-							</div>
-							<div className="box-body">
-								<table id="productList" className="table table-striped table-bordered table-hover" cellSpacing="0">
-									<thead>
-										<tr>
-											<th>商品名称</th>
-											<th>品牌</th>
-											<th>CPU型号</th>
-											<th>RAM / ROM</th>
-											<th>上架时间</th>
-											<th>价格</th>
-											<th>操作</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
+			<div>
+				<Header/>
+            	<Sidebar/>
+            	<div className="main-content">
+					<div className="my-container">
+						<div className="row">
+							<div className="col-xs-12">
+								<div className="box">
+									<div className="box-header">
+										<h4 className="box-title">商品列表</h4>
+										<button className="btn btn-primary btn-add">新 增</button>
+									</div>
+									<div className="box-body">
+										<table id="productList" className="table table-striped table-bordered table-hover" cellSpacing="0">
+											<thead>
+												<tr>
+													<th>商品名称</th>
+													<th>品牌</th>
+													<th>CPU型号</th>
+													<th>RAM / ROM</th>
+													<th>上架时间</th>
+													<th>价格</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

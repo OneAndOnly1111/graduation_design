@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Link} from 'react-router-dom'
 class Header extends React.Component{
 	render(){
 		return (
@@ -8,10 +8,10 @@ class Header extends React.Component{
 					<span>AdminLTE</span>
 				</a>
 				<a className="shrink-btn"><i className="fa fa-bars"></i></a>
-				<a className="sign-out">
+				<Link to='/' className="sign-out">
 					<i className="fa fa-sign-out"></i>
 					<span>登出</span>
-				</a>
+				</Link>
 			</div>
 		)
 	}
