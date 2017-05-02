@@ -18,20 +18,20 @@ export default class ProductAddModal extends React.Component {
 
   addProduct(){
     var brand = this.refs.brand.refs.input.value;
-    var series = this.refs.series.refs.input.value;
+    var model = this.refs.series.refs.input.value;
     var rom = this.refs.rom.refs.input.value;
     var ram = this.refs.ram.refs.input.value;
     var cpu = this.refs.cpu.refs.input.value;
     var price  = this.state.price;
     var shelfTime = this.state.shelfTime;
-    console.log(brand,series,rom,ram,cpu,price,shelfTime);
+    console.log(brand,model,rom,ram,cpu,price,shelfTime);
     $.ajax({
-      url:"addProduct.json",
-      type:'get',
+      url:"http://localhost:7070/product/add",
+      type:'post',
       contentType:"application/json",
       data:JSON.stringify({
         brand:brand,
-        series:series,
+        model:model,
         rom:rom,
         ram:ram,
         cpu:cpu,
@@ -39,8 +39,14 @@ export default class ProductAddModal extends React.Component {
         shelfTime:shelfTime
       }),
       success:(res)=>{
-        message.success('添加成功！',2);
-        $('#productAddModal').modal('hide');
+        res = JSON.parse(res);
+        if(res.meta.message=='ok'){
+          message.success('添加成功！',2);
+          $('#productAddModal').modal('hide');
+          window.location.reload();
+        }else{
+          message.error('添加失败！',2)
+        }
       },
       error:()=>{
         message.error('添加失败！',2)

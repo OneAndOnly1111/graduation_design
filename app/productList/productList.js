@@ -4,41 +4,41 @@ import Header from '../common/header'
 import Sidebar from '../common/sidebar'
 import ProductAddModal from './addProductModal'
 import { Table, Icon ,Button,Popconfirm,message } from 'antd';
-const tableData = [];
-
 
 class ProductList extends React.Component{
-
 	state = {
-		listData:[],
+		tableData:[],
 		selectedRowKeys: [],
 	}
 	getProductList(){
 		$.ajax({
-			url:"../../mock/productList.json",
+			url:"http://localhost:7070/product/getAll",
 			type:'get',
 			contentType:"application/json",
 			success:(res)=>{
+				res = JSON.parse(res);
 				this.handleData(res.data);
-				this.setState({
-					listData:res.data
-				});
 			}
 		})
 	}
 
 	handleData(data){
+		var tableData = [];
 		data.map((item)=>{
 			tableData.push({
 				id:item.id,
 				key:item.id,
-				name:item.name,
+				model:item.model,
 				brand:item.brand,
 				cpu:item.cpu,
 				rom:item.ram +'/'+item.rom,
 				time:item.shelfTime,
 				price:item.price
 			})
+		});
+		console.log('tableData',tableData);
+		this.setState({
+			tableData:tableData
 		})
 	}
 
@@ -53,14 +53,19 @@ class ProductList extends React.Component{
 
 	removeProduct(ids){
 		$.ajax({
-			url:'/removeProduct.json',
+			url:'http://localhost:7070/product/delete',
 			type:'post',
 			contentType:'application/json',
 			data:JSON.stringify(ids),
 			success: (res)=>{
+				res = JSON.parse(res);
 				console.log(res);
-				message.success('删除成功！',2)
-				this.getProductList();
+				if(res.meta.message=='ok'){
+					message.success('删除成功！',2);
+					this.getProductList();
+				}else{
+					message.error('删除失败！',2);
+				}
 			},
 			error:(err)=>{
 				message.error('删除失败！',2)
@@ -87,10 +92,6 @@ class ProductList extends React.Component{
 		  key: 'id',
 		  render: text => <a href="#">{text}</a>,
 		},{
-		  title: '商品名称',
-		  dataIndex: 'name',
-		  key: 'name',
-		}, {
 		  title: '品牌',
 		  dataIndex: 'brand',
 		  key: 'brand',
@@ -105,7 +106,11 @@ class ProductList extends React.Component{
 		    value: 'HUAWEI',
 		  }],
 		  onFilter: (value, record) => record.brand.indexOf(value) === 0,
-		}, {
+		},{
+		  title: '商品名称',
+		  dataIndex: 'model',
+		  key: 'model',
+		},{
 		  title: 'CPU型号',
 		  dataIndex: 'cpu',
 		  key: 'cpu',
@@ -117,25 +122,17 @@ class ProductList extends React.Component{
 		  title: '价格',
 		  dataIndex: 'price',
 		  key: 'price',
-		  filters: [{
-		    text: '1599',
-		    value: '1599',
-		  }, {
-		    text: '2499',
-		    value: '2499',
-		  }],
 		  sorter: (a, b) => a.price - b.price,
 		}, {
 		  title: '上架时间',
 		  dataIndex: 'time',
 		  key: 'time',
-		  sorter: (a, b) => a.time - b.time,
 		}, {
 		  title: '操作',
 		  key: 'action',
 		  render: (text, record) => (
 		    <span>
-		      <a href="#" onClick={(e)=>{this.handleReomoveSingle(e)}}>下架</a>
+			  <a href="#" onClick={(e)=>{this.handleReomoveSingle(e)}}>下架</a>
 		      <span className="ant-divider" />
 		      <a href="#">编辑</a>
 		    </span>
@@ -159,10 +156,10 @@ class ProductList extends React.Component{
 									<div className="box-header">
 										<h4 className="box-title">商品列表</h4>
 										<Button type="primary" data-toggle="modal" data-target="#productAddModal">新增</Button>
-										<Button type="danger" style={{marginLeft:'10px'}} onClick={(e)=>{this.handleRemoveMult(e)}}>删除</Button>
+										<Button type="danger" style={{marginLeft:'10px'}} onClick={(e)=>{this.handleRemoveMult(e)}}>下架</Button>
 									</div>
 									<div className="box-body">
-										<Table columns={columns} rowSelection={rowSelection} dataSource={tableData} />
+										<Table columns={columns} rowSelection={rowSelection} dataSource={this.state.tableData} />
 									</div>
 								</div>
 							</div>
