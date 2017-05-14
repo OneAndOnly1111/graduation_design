@@ -62,7 +62,7 @@ export default class Register extends React.Component{
 					</div>
 					<div className="form-group">
 						<span><b>*</b>职位：</span><select name="region" className="form-input" ref="position">
-						<option value="salesman">销售员</option>
+						<option value="saleman">销售员</option>
 						<option value="manager">销售经理</option>
 						</select>
 					</div>

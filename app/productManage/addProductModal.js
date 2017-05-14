@@ -87,8 +87,8 @@ export default class ProductAddModal extends React.Component {
               <Form>
                 <FormItem {...formItemLayout} label="品牌"><Input ref='brand'/></FormItem>
                 <FormItem {...formItemLayout} label="型号"><Input ref='series'/></FormItem>
-                <FormItem {...formItemLayout} label="ROM"><Input ref='rom'/></FormItem>
                 <FormItem {...formItemLayout} label="RAM"><Input ref='ram'/></FormItem>
+                <FormItem {...formItemLayout} label="ROM"><Input ref='rom'/></FormItem>
                 <FormItem {...formItemLayout} label="CPU型号"><Input ref='cpu'/></FormItem>
                 <FormItem {...formItemLayout} label="价格">
                   <InputNumber defaultValue={2000} onChange={this.handlePriceChange.bind(this)}

@@ -99,7 +99,7 @@ class SaleMessageForm extends React.Component{
 	    			"region":values.store[0]+values.store[1]+values.store[2],
 	    			"people":values.salePerson,
 	    			"product_id":"123",
-	    			"product_info":values.product[0]+values.product[1]+values.product[2],
+	    			"product_info":values.product[0]+'/'+values.product[1]+'/'+values.product[2],
 	    			"price":values.price,
 	    			"count":values.saleNumber,
 	    			"discount":values.discount,
@@ -111,9 +111,9 @@ class SaleMessageForm extends React.Component{
 	    			res = JSON.parse(res);
 	    			console.log(res);
 	    			if(res.meta.message=='ok'){
-	    				message.success('您已成功添加一条记录！');
+	    				message.success('保存成功！');
 	    			}else{
-	    				message.error('您已成功添加一条记录！');
+	    				message.error('保存失败');
 	    			}
 	    		}
 	    	})
@@ -230,7 +230,7 @@ class SaleMessageForm extends React.Component{
 					            sm: { span: 8, offset: 7},
 					          }}
 					        >
-					          <Button type="primary" htmlType="submit" size="large" onClick={this.handleSubmit}>Submit</Button>
+					          <Button type="primary" htmlType="submit" size="large" onClick={this.handleSubmit}>保存</Button>
 					        </FormItem>
 	        			</Form>
 	        		</div>

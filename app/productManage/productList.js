@@ -31,9 +31,9 @@ class ProductList extends React.Component{
 				model:item.model,
 				brand:item.brand,
 				cpu:item.cpu,
-				rom:item.ram +'/'+item.rom,
+				rom:item.ram +'GB / '+item.rom+'GB',
 				time:item.shelfTime,
-				price:item.price
+				price:'￥'+item.price
 			})
 		});
 		console.log('tableData',tableData);
@@ -115,7 +115,7 @@ class ProductList extends React.Component{
 		  dataIndex: 'cpu',
 		  key: 'cpu',
 		}, {
-		  title: 'ROM/RAM',
+		  title: 'RAM / ROM',
 		  dataIndex: 'rom',
 		  key: 'rom',
 		}, {
