@@ -18,8 +18,8 @@ class SaleMessageForm extends React.Component{
 		super(props);
 		this.state={
 			store:[],
-			name:'李美玲',
-			storeInfo:'江西省南昌市红谷滩店'
+			name:'',
+			storeInfo:''
 		}
 	}
 
@@ -40,7 +40,8 @@ class SaleMessageForm extends React.Component{
 					productInfo.push(item.brand);
 				});
 				this.setState({
-					productInfo:_.uniq(productInfo)
+					productInfo:_.uniq(productInfo),
+					secondProductInfo:_.uniq(productInfo)[0]
 				});
 				console.log("productInfo",productInfo);
 			}
@@ -56,7 +57,9 @@ class SaleMessageForm extends React.Component{
 				console.log(res);
 				if(res.data){
 					this.setState({
-						salerData:res.data
+						salerData:res.data,
+						name:res.data[0].nickname,
+						storeInfo:res.data[0].region
 					});
 				}
 			}
@@ -68,7 +71,7 @@ class SaleMessageForm extends React.Component{
 	    this.props.form.validateFields((err, values) => {
 	    	console.log('Received values of form: ', values);
 	    	if(values.salePerson && values.product[0] && values.price &&
-	    		values.saleNumber && values.discount && values.time && values.payWay && values.ageRange){
+	    		values.saleNumber && values.discount && values.time){
 		    		$.ajax({
 		    		url:"http://localhost:7070/sale/add",
 		    		type:"post",
@@ -81,9 +84,7 @@ class SaleMessageForm extends React.Component{
 		    			"price":values.price,
 		    			"count":values.saleNumber,
 		    			"discount":values.discount,
-		    			"time":moment(values.time).format('X')*1000,
-		    			"pay":values.payWay,
-		    			"age":values.ageRange
+		    			"time":moment(values.time).format('X')*1000
 		    		}),
 		    		success:(res)=>{
 		    			res = JSON.parse(res);
@@ -127,10 +128,10 @@ class SaleMessageForm extends React.Component{
 	        	<Sidebar/>
 	        	<div className="main-content">
 	        		<div className="my-container">
-	        			<Form layout='horizontal'>
+	        			<Form layout='horizontal' style={{paddingTop:40}}>
 		        			<FormItem {...formItemLayout} label="销售人">
 		        				{getFieldDecorator('salePerson', {
-		        					initialValue:'李美玲',
+		        					initialValue:this.state.name,
 		        					rules: [{ required: true, message: '请填写销售人姓名！' }]
 		        				})(
 		        					<Select onChange={this.onSaleChange}>{salerOption}</Select>
@@ -146,7 +147,7 @@ class SaleMessageForm extends React.Component{
 					        </FormItem>
 		        			<FormItem {...formItemLayout} label="售出商品">
 		        				{getFieldDecorator('product', {
-		        					initialValue:'小米',
+		        					initialValue:this.state.secondProductInfo,
 						        	rules: [{ required: true, message: '请选择售出商品的信息！' }]
 						        })(
 						        	<Select>{productOption}</Select>
@@ -188,34 +189,7 @@ class SaleMessageForm extends React.Component{
 						        	<DatePicker format={dateFormat}/>
 						        )}
       						</FormItem>
-					        <FormItem {...formItemLayout} label="付款方式">
-					        	{getFieldDecorator('payWay', {
-      								initialValue:'card',
-						        	rules: [{ required: true, message: '请选择付款方式' }]
-						        })(
-						        	<Select placeholder="请选择顾客的支付方式">
-						              <Option value="cash">现金交易</Option>
-						              <Option value="card">银行卡交易</Option>
-						              <Option value="alipay">支付宝交易</Option>
-						              <Option value="weixin">微信交易</Option>
-						              <Option value="other">其它</Option>
-						            </Select>
-						        )}
-					        </FormItem>
-					        <FormItem {...formItemLayout} label="购买人年龄范围">
-						        {getFieldDecorator('ageRange', {
-						        	initialValue:'under25',
-							        rules: [{ required: true, message: '请选择范围' }]
-							    })(
-						        	<RadioGroup>
-						        	  <Radio value="up18">18以下</Radio>
-						              <Radio value="under25">18-25</Radio>
-						              <Radio value="under35">25-35</Radio>
-						              <Radio value="under50">35-50</Radio>
-						              <Radio value="up50">50以上</Radio>
-						            </RadioGroup>
-							    )}
-					        </FormItem>
+					        
 	        				<FormItem
 					          wrapperCol={{
 					            xs: { span: 24, offset: 0 },

@@ -143,13 +143,9 @@ class ProductList extends React.Component{
 		  	job=='manager'?
 		    <span>
 			  <a href="#" onClick={(e)=>{this.handleReomoveSingle(e)}}>下架</a>
-		      <span className="ant-divider" />
-		      <a href="#">编辑</a>
 		    </span>:
 		    <span>
 			  <a href="#" disabled>下架</a>
-		      <span className="ant-divider" />
-		      <a href="#" disabled>编辑</a>
 		    </span>
 		  ),
 		}];
