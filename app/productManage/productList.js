@@ -87,6 +87,13 @@ class ProductList extends React.Component{
 		this.removeProduct(ids);
 	}
 	
+	onRowClick = (record,index)=>{
+		console.log(record,index);
+		this.setState({
+			removeId:record.id
+		});
+	}
+
 	render(){
 		const columns = [{
 		  title: '商品编号',
@@ -98,11 +105,11 @@ class ProductList extends React.Component{
 		  dataIndex: 'brand',
 		  key: 'brand',
 		   filters: [{
+		    text: 'iphone',
+		    value: 'iphone',
+		  },{
 		    text: '小米',
 		    value: '小米',
-		  },{
-		    text: 'vivo',
-		    value: 'vivo',
 		  },{
 		    text: 'HUAWEI',
 		    value: 'HUAWEI',
@@ -177,7 +184,10 @@ class ProductList extends React.Component{
 										
 									</div>
 									<div className="box-body">
-										<Table columns={columns} rowSelection={rowSelection} dataSource={this.state.tableData} />
+										<Table columns={columns} 
+											rowSelection={rowSelection} 
+											dataSource={this.state.tableData} 
+											onRowClick={this.onRowClick}/>
 									</div>
 								</div>
 							</div>

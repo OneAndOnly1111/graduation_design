@@ -9,6 +9,7 @@ import ProductList from './productManage/productList'
 import SaleRanking from './productManage/saleRanking'
 import SaleMessageAdd from './saleManage/saleMessageAdd'
 import StaffRanking from './saleManage/salerRanking'
+import StoreManager from './storeManager/storeManager'
 import {BrowserRouter as Router,Route,Link,NavLink,IndexRoute,browserHistory} from 'react-router-dom'
 require('../style/main.less');  
 require('../js/datatables/jquery.dataTables.js');
@@ -24,6 +25,7 @@ ReactDOM.render((
         <Route path="/addMessage" component={SaleMessageAdd}/>
         <Route path='/staffRanking' component={StaffRanking}/>
         <Route path='/saleRanking' component={SaleRanking}/>
+        <Route path='/storeManager' component={StoreManager}/>
       </div>
     </Router>
 ),document.getElementById('wrapper'));

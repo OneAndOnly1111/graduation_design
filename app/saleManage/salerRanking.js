@@ -130,7 +130,7 @@ export default class StaffRanking extends React.Component {
     }];
     return (
     	<div>
-			<Header/>
+			  <Header/>
 	    	<Sidebar/>
 	    	<div className="main-content">
 	    		<div className="my-container">

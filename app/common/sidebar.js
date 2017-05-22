@@ -1,5 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
+import {Icon} from 'antd';
 
 export default class Sidebar extends React.Component{
 	render(){
@@ -8,26 +9,32 @@ export default class Sidebar extends React.Component{
 	      	<div className="main-sidebar">
 	          	<ul className="sidebar-menu">
 	          		<li className="treeview">
-		              <NavLink to="/addMessage" activeClassName="selected"> 
-		                <i className="fa fa-tachometer"></i>
-		                <span className="text">销售信息录入</span>
+		              <NavLink to="/storeManager" activeClassName="selected"> 
+		                <Icon type="appstore-o" />
+		                <span className="text">门店管理</span>
 		              </NavLink>
 		            </li>
-	          		<li className="treeview">
+		            <li className="treeview">
 		              <NavLink to="/productList" activeClassName="selected"> 
-		                <i className="fa fa-pie-chart"></i>
-		                <span className="text">商品列表</span>
+		                <Icon type="shopping-cart" />
+		                <span className="text">商品管理</span>
+		              </NavLink>
+		            </li>
+		            <li className="treeview">
+		              <NavLink to="/addMessage" activeClassName="selected"> 
+		                <Icon type="file-add" />
+		                <span className="text">销售信息录入</span>
 		              </NavLink>
 		            </li>
 		            <li className="treeview">
 		              <NavLink to="/staffRanking" activeClassName="selected"> 
-		                <i className="fa fa-files-o"></i>
+		                <Icon type="user" />
 		                <span className="text">员工排行</span>
 		              </NavLink>
 		            </li>
 		            <li className="treeview">
 		              <NavLink to="/saleRanking" activeClassName="selected">  
-		                <i className="fa fa-line-chart"></i>
+		                <Icon type="line-chart" />
 		                <span className="text">销售排行</span>
 		              </NavLink>
 		            </li>

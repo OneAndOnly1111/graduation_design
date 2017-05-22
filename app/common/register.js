@@ -34,7 +34,7 @@ class RegistrationForm extends React.Component{
 				console.log(res);
 				const arr = [];
 				res.data.map(ele=>{
-					arr.push(ele.province+ele.district+ele.name)
+					arr.push(ele.name)
 				});
 				this.setState({
 					store:arr

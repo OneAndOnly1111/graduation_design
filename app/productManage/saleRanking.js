@@ -25,7 +25,7 @@ export default class SaleRanking extends React.Component{
 			"type":"get",
 			success:(res)=>{
 				res = JSON.parse(res);
-				var storeVal = res.data[0].province+res.data[0].district+res.data[0].name;
+				var storeVal = res.data[0].name;
 				this.setState({
 					storeData:res.data,
 					storeVal:storeVal
@@ -197,7 +197,7 @@ export default class SaleRanking extends React.Component{
 	}
 	
 	render(){
-		const storeOption = this.state.storeData.map(store=><Option key={store.province+store.district+store.name}>{store.province+store.district+store.name}</Option>)
+		const storeOption = this.state.storeData.map(store=><Option key={store.name}>{store.name}</Option>)
 		return(
 			<div>
 				<Header/>
