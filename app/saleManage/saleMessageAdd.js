@@ -1,5 +1,6 @@
 import React from "react"
 import $ from "jquery"
+import _ from "underscore"
 import moment from 'moment'
 import Header from '../common/header'
 import Sidebar from '../common/sidebar'
@@ -11,113 +12,102 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const dateFormat = 'YYYY/MM/DD';
 
-const residences = [{
-  value: '浙江',
-  label: '浙江',
-  children: [{
-    value: '杭州',
-    label: '杭州',
-    children: [{
-      value: '西湖店',
-      label: '西湖店',
-    }],
-  },{
-    value: '绍兴',
-    label: '绍兴',
-    children: [{
-      value: '越城区',
-      label: '越城区店',
-    }],
-  }],
-}, {
-  value: '江苏',
-  label: '江苏',
-  children: [{
-    value: '南京',
-    label: '南京',
-    children: [{
-      value: '夫子庙店',
-      label: '夫子庙店',
-    }],
-  }],
-}];
-
-const productMessage = [{
-  value: '小米',
-  label: '小米',
-  children: [{
-    value: '小米5',
-    label: '小米5',
-    children: [{
-      value: '3GB/32GB',
-      label: '3GB/32GB',
-    },{
-      value: '3GB/64GB',
-      label: '3GB/32GB',
-    }],
-  },{
-    value: 'MI6',
-    label: '小米6',
-    children: [{
-      value: '6GB/64GB',
-      label: '6GB/64GB',
-    },{
-      value: '6GB/128GB',
-      label: '6GB/128GB',
-    }],
-  }],
-}, {
-  value: 'iphone',
-  label: 'iphone',
-  children: [{
-    value: 'iphone7',
-    label: 'iphone7',
-    children: [{
-      value: '2GB/64GB',
-      label: '2GB/64GB',
-    }],
-  }],
-}];
 
 class SaleMessageForm extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state={
 			store:[],
+			name:'李美玲',
+			storeInfo:'江西省南昌市红谷滩店'
 		}
 	}
 
+	componentDidMount() {
+		this.getAllSaler();
+		this.getProductInfo();
+	}
+
+	getProductInfo = ()=>{
+		$.ajax({
+			url:"http://127.0.0.1:7070/product/getAll",
+			contentType:'application/json',
+			success:(res)=>{
+				res = JSON.parse(res);
+				console.log("res",res);
+				var productInfo = [];
+				res.data.map((item)=>{
+					productInfo.push(item.brand);
+				});
+				this.setState({
+					productInfo:_.uniq(productInfo)
+				});
+				console.log("productInfo",productInfo);
+			}
+		})
+	}
+
+	getAllSaler = ()=>{
+		$.ajax({
+			url:"http://127.0.0.1:7070/user/getsaleman_name",
+			contentType:'application/json',
+			success:(res)=>{
+				res = JSON.parse(res);
+				console.log(res);
+				if(res.data){
+					this.setState({
+						salerData:res.data
+					});
+				}
+			}
+		});
+	}
+
 	handleSubmit = (e) => {
-	    e.preventDefault();
+	    // e.preventDefault();
 	    this.props.form.validateFields((err, values) => {
 	    	console.log('Received values of form: ', values);
-	    	$.ajax({
-	    		url:"http://localhost:7070/sale/add",
-	    		type:"post",
-	    		contentType:'application/json',
-	    		data:JSON.stringify({
-	    			"region":values.store[0]+values.store[1]+values.store[2],
-	    			"people":values.salePerson,
-	    			"product_id":"123",
-	    			"product_info":values.product[0]+'/'+values.product[1]+'/'+values.product[2],
-	    			"price":values.price,
-	    			"count":values.saleNumber,
-	    			"discount":values.discount,
-	    			"time":moment(values.time).format('X')*1000,
-	    			"pay":values.payWay,
-	    			"age":values.ageRange
-	    		}),
-	    		success:(res)=>{
-	    			res = JSON.parse(res);
-	    			console.log(res);
-	    			if(res.meta.message=='ok'){
-	    				message.success('保存成功！');
-	    			}else{
-	    				message.error('保存失败');
-	    			}
-	    		}
-	    	})
+	    	if(values.salePerson && values.product[0] && values.price &&
+	    		values.saleNumber && values.discount && values.time && values.payWay && values.ageRange){
+		    		$.ajax({
+		    		url:"http://localhost:7070/sale/add",
+		    		type:"post",
+		    		contentType:'application/json',
+		    		data:JSON.stringify({
+		    			"region":values.store,
+		    			"people":values.salePerson,
+		    			"product_id":"123",
+		    			"product_info":values.product,
+		    			"price":values.price,
+		    			"count":values.saleNumber,
+		    			"discount":values.discount,
+		    			"time":moment(values.time).format('X')*1000,
+		    			"pay":values.payWay,
+		    			"age":values.ageRange
+		    		}),
+		    		success:(res)=>{
+		    			res = JSON.parse(res);
+		    			console.log(res);
+		    			if(res.meta.message=='ok'){
+		    				message.success('保存成功！');
+		    			}else{
+		    				message.error('保存失败');
+		    			}
+		    		}
+		    	});
+	    	}
 	    });
+  	}
+
+  	onSaleChange = (val)=>{
+  		console.log(val);
+  		this.state.salerData?this.state.salerData.map((info)=>{
+			if(info.nickname == val){
+				this.setState({
+					storeInfo:info.region
+				});
+			}
+		}):null;
   	}
 
 	render(){
@@ -129,6 +119,8 @@ class SaleMessageForm extends React.Component{
 	      wrapperCol: { span: 14, offset: 4 },
 	    }
 	    const { getFieldDecorator } = this.props.form;
+	    const salerOption = this.state.salerData?this.state.salerData.map((info)=><Option key={info.nickname}>{info.nickname}</Option>):null
+		const productOption = this.state.productInfo?this.state.productInfo.map((info)=><Option key={info}>{info}</Option>):null
 		return(
 			<div>
 				<Header/>
@@ -138,26 +130,26 @@ class SaleMessageForm extends React.Component{
 	        			<Form layout='horizontal'>
 		        			<FormItem {...formItemLayout} label="销售人">
 		        				{getFieldDecorator('salePerson', {
-		        					initialValue:'张三',
+		        					initialValue:'李美玲',
 		        					rules: [{ required: true, message: '请填写销售人姓名！' }]
 		        				})(
-		        					<Input />
+		        					<Select onChange={this.onSaleChange}>{salerOption}</Select>
 		        				)}
 		        			</FormItem>
 					        <FormItem {...formItemLayout} label="所属门店">
-						        {getFieldDecorator('store', {
-						        	initialValue:['浙江', '杭州', '西湖店'],
-						        	rules: [{ required: true, message: '请选择门店！' }]
+					        	{getFieldDecorator('store', {
+		        					initialValue:this.state.storeInfo,
+						        	rules: [{ required: true, message: '请选择门店信息！' }]
 						        })(
-						        	<Cascader options={residences}/>
+						        	<Select></Select>
 						        )}
 					        </FormItem>
 		        			<FormItem {...formItemLayout} label="售出商品">
 		        				{getFieldDecorator('product', {
-		        					initialValue:['小米', '小米5', '3GB/32GB'],
+		        					initialValue:'小米',
 						        	rules: [{ required: true, message: '请选择售出商品的信息！' }]
 						        })(
-						        	<Cascader options={productMessage}/>
+						        	<Select>{productOption}</Select>
 						        )}
 		        			</FormItem>
 					        <FormItem {...formItemLayout} label="售出价格">
@@ -241,5 +233,4 @@ class SaleMessageForm extends React.Component{
 }
 
 const SaleMessageAdd = Form.create()(SaleMessageForm)
-
 export default SaleMessageAdd

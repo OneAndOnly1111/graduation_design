@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button, message} from 'antd';
+import moment from 'moment';
 import {
   Form, Select, InputNumber, Switch, Radio,
   Slider, Upload, Icon,Input,DatePicker 
@@ -8,7 +9,8 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-export default class ProductAddModal extends React.Component {
+
+class ProductAddModalForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
@@ -16,58 +18,36 @@ export default class ProductAddModal extends React.Component {
     }
   }
 
-  addProduct(){
-    var brand = this.refs.brand.refs.input.value;
-    var model = this.refs.series.refs.input.value;
-    var rom = this.refs.rom.refs.input.value;
-    var ram = this.refs.ram.refs.input.value;
-    var cpu = this.refs.cpu.refs.input.value;
-    var price  = this.state.price;
-    var shelfTime = this.state.shelfTime;
-    console.log(brand,model,rom,ram,cpu,price,shelfTime);
-    $.ajax({
-      url:"http://localhost:7070/product/add",
-      type:'post',
-      contentType:"application/json",
-      data:JSON.stringify({
-        brand:brand,
-        model:model,
-        rom:rom,
-        ram:ram,
-        cpu:cpu,
-        price:price,
-        shelfTime:shelfTime
-      }),
-      success:(res)=>{
-        res = JSON.parse(res);
-        if(res.meta.message=='ok'){
-          message.success('添加成功！',2);
-          $('#productAddModal').modal('hide');
-          window.location.reload();
-        }else{
-          message.error('添加失败！',2)
-        }
-      },
-      error:()=>{
-        message.error('添加失败！',2)
-        $('#productAddModal').modal('hide');
-      }
-    })
-  }
-
-
-  handlePriceChange(val){
-      console.log(val);
-      this.setState({
-        price:val
-      })
-  }
-
-  handleTimeChange(field,val){
-    console.log(field,val);
-    this.setState({
-      shelfTime:val
-    })
+  addProduct = ()=>{
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+           $.ajax({
+                url:"http://localhost:7070/product/add",
+                type:'post',
+                contentType:"application/json",
+                data:JSON.stringify({
+                  brand:values.brand,
+                  model:values.series,
+                  rom:values.rom,
+                  ram:values.ram,
+                  cpu:values.cpu,
+                  price:values.price,
+                  shelfTime:moment(values.shelfTime).format('YYYY-MM-DD')
+                }),
+                success:(res)=>{
+                  res = JSON.parse(res);
+                  if(res.meta.message=='ok'){
+                    message.success('添加成功！',2);
+                    $('#productAddModal').modal('hide');
+                    window.location.reload();
+                  }else{
+                    message.error('添加失败！',2)
+                  }
+                }
+             });
+          }
+      });
   }
 
   render() {
@@ -75,6 +55,7 @@ export default class ProductAddModal extends React.Component {
       labelCol: { span: 6 },
       wrapperCol: { span: 12 },
     };
+    const { getFieldDecorator } = this.props.form;
     return (
       <div className="modal fade" id='productAddModal' tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
@@ -85,18 +66,55 @@ export default class ProductAddModal extends React.Component {
             </div>
             <div className="modal-body">
               <Form>
-                <FormItem {...formItemLayout} label="品牌"><Input ref='brand'/></FormItem>
-                <FormItem {...formItemLayout} label="型号"><Input ref='series'/></FormItem>
-                <FormItem {...formItemLayout} label="RAM"><Input ref='ram'/></FormItem>
-                <FormItem {...formItemLayout} label="ROM"><Input ref='rom'/></FormItem>
-                <FormItem {...formItemLayout} label="CPU型号"><Input ref='cpu'/></FormItem>
-                <FormItem {...formItemLayout} label="价格">
-                  <InputNumber defaultValue={2000} onChange={this.handlePriceChange.bind(this)}
-                      formatter={value => `$ ${value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}
-                      parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                    />
+                <FormItem {...formItemLayout} label="品牌">
+                  {getFieldDecorator('brand', {
+                    rules: [{ required: true, message: '请输入品牌名称!' }],
+                  })(
+                    <Input/>
+                  )}
                 </FormItem>
-                <FormItem {...formItemLayout} label="上架时间"><DatePicker onChange={this.handleTimeChange.bind(this)}/></FormItem>
+                <FormItem {...formItemLayout} label="型号">
+                  {getFieldDecorator('series', {
+                    rules: [{ required: true, message: '请输入型号!' }],
+                  })(
+                    <Input/>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="RAM">
+                  {getFieldDecorator('ram', {
+                    rules: [{ required: true, message: '请输入RAM!' }],
+                  })(
+                    <Input/>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="ROM">
+                  {getFieldDecorator('rom', {
+                    rules: [{ required: true, message: '请输入ROM!' }],
+                  })(
+                    <Input/>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="CPU型号">
+                  {getFieldDecorator('cpu', {
+                    rules: [{ required: true, message: '请输入cpu类型!' }],
+                  })(
+                    <Input/>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="价格">
+                  {getFieldDecorator('price', {
+                    rules: [{ required: true, message: '请输入价格!' }],
+                  })(
+                    <InputNumber/>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="上架时间">
+                  {getFieldDecorator('shelfTime', {
+                    rules: [{ required: true, message: '请选择上架时间!' }],
+                  })(
+                    <DatePicker/>
+                  )}
+                </FormItem>
               </Form>
             </div>
             <div className="modal-footer">
@@ -110,3 +128,5 @@ export default class ProductAddModal extends React.Component {
   }
 }
 
+const ProductAddModal = Form.create()(ProductAddModalForm);
+export default ProductAddModal

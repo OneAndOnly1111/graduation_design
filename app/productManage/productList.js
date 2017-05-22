@@ -4,6 +4,8 @@ import Header from '../common/header'
 import Sidebar from '../common/sidebar'
 import ProductAddModal from './addProductModal'
 import { Table, Icon ,Button,Popconfirm,message } from 'antd';
+const job = window.sessionStorage.getItem("job");
+console.log(job);
 
 class ProductList extends React.Component{
 	state = {
@@ -131,10 +133,16 @@ class ProductList extends React.Component{
 		  title: '操作',
 		  key: 'action',
 		  render: (text, record) => (
+		  	job=='manager'?
 		    <span>
 			  <a href="#" onClick={(e)=>{this.handleReomoveSingle(e)}}>下架</a>
 		      <span className="ant-divider" />
 		      <a href="#">编辑</a>
+		    </span>:
+		    <span>
+			  <a href="#" disabled>下架</a>
+		      <span className="ant-divider" />
+		      <a href="#" disabled>编辑</a>
 		    </span>
 		  ),
 		}];
@@ -155,8 +163,18 @@ class ProductList extends React.Component{
 								<div className="box">
 									<div className="box-header">
 										<h4 className="box-title">商品列表</h4>
-										<Button type="primary" data-toggle="modal" data-target="#productAddModal">新增</Button>
-										<Button type="danger" style={{marginLeft:'10px'}} onClick={(e)=>{this.handleRemoveMult(e)}}>下架</Button>
+										{
+											job=='manager'?
+											<span>
+												<Button type="primary" data-toggle="modal" data-target="#productAddModal">新增</Button>
+												<Button type="danger" style={{marginLeft:'10px'}} onClick={(e)=>{this.handleRemoveMult(e)}}>下架</Button>
+											</span>:
+											<span>
+												<Button type="primary" disabled>新增</Button>
+												<Button type="danger" style={{marginLeft:'10px'}} disabled>下架</Button>
+											</span>
+										}
+										
 									</div>
 									<div className="box-body">
 										<Table columns={columns} rowSelection={rowSelection} dataSource={this.state.tableData} />
@@ -170,13 +188,6 @@ class ProductList extends React.Component{
 		)
 	}
 }
-function confirm(e) {
-  console.log(e);
-  message.success('Click on Yes');
-}
 
-function cancel(e) {
-  console.log(e);
-  message.error('Click on No');
-}
 export default ProductList
+

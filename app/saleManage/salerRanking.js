@@ -5,19 +5,6 @@ import Header from '../common/header'
 import Sidebar from '../common/sidebar'
 import {Table, Input, Button, Icon, Badge, Menu, Dropdown, } from 'antd';
 
-
-const menu = (
-  <Menu>
-    <Menu.Item>
-      Action 1
-    </Menu.Item>
-    <Menu.Item>
-      Action 2
-    </Menu.Item>
-  </Menu>
-);
-
-
 export default class StaffRanking extends React.Component {
   state = {
     filterDropdownVisible: false,
@@ -32,112 +19,96 @@ export default class StaffRanking extends React.Component {
 
   getSaleData(){
   	$.ajax({
-  		url:'../../mock/sale_ranking.json',
+      url:'http://127.0.0.1:7070/sale/achievement',
   		type:'get',
+      contentType:'application/json',
   		success:(res)=>{
-			this.handleData(res.data);
+        res = JSON.parse(res);
+        console.log(res);
+        var arr = [];
+        for(var name in res.data){
+          if(res.data[name].length){
+            arr.push(name);
+          }
+        };
+        console.log("arr",arr);
+        var arrTotal =[];
+        arr.map((ele,index)=>{
+            console.log(res.data[ele].count);
+            arrTotal.push({
+                key:index,
+                name:ele,
+                region:res.data[ele][0].region,
+                saleNumber:this.getSummary(res.data[ele],"count"),
+                summaryPrice:'￥'+this.getSummary(res.data[ele],"price"),
+                // ranking:index+1
+            });
+        });
+        console.log("arrTotal",arrTotal);
+        arrTotal.sort(function(a,b){
+          return b.saleNumber-a.saleNumber
+        });
+        arrTotal.map((ele,index)=>{
+          ele.ranking = index+1
+        })
+        console.log("sort",arrTotal);
+        this.setState({
+          arrTotal:arrTotal,
+          data:res.data
+        });
   		}
   	});
   }
 
-  handleData = (res) => {
-  	var arr = [];
-  	res.map((obj,index)=>{
-  		arr.push({
-  			key:index,
-		  	name: obj.name,
-		  	region: obj.region,
-		  	saleNumber: obj.saleNumber,
-		  	summaryPrice:'￥ '+obj.summaryPrice,
-		  	ranking:index+1
-  		});
-  	})
-  	console.log('arr',arr);
-	this.setState({
-		data:arr
-	})
-	this.listData = arr;
+  sort = (data)=>{
+    
   }
 
-
-  onInputChange = (e) => {
-    this.setState({ searchText: e.target.value });
-  }
-
-  onSearch = () => {
-    const { searchText } = this.state;
-    const reg = new RegExp(searchText, 'gi');
-    this.setState({
-      filterDropdownVisible: false,
-      filtered: !!searchText,
-      data: this.listData.map((record) => {
-        const match = record.name.match(reg);
-        if (!match) {
-          return null;
-        }
-        return {
-          ...record,
-          name: (
-            <span>
-              {record.name.split(reg).map((text, i) => (
-                i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
-              ))}
-            </span>
-          ),
-        };
-      }).filter(record => !!record),
+  getSummary = (data,type)=>{
+    var total = 0;
+    data.map((ele)=>{
+      if(type=='price'){
+        total += parseInt(ele[type])*ele.count;
+      }else{
+        total += parseInt(ele[type]);
+      }
     });
+    return total;
   }
 
-
-
-expandedRowRender = () => {
+  expandedRowRender = (obj) => {
+    var name = obj.name;
+    console.log("name",obj,name);
+    const arrList = [];
+    this.state.data[name].map((item,i)=>{
+      arrList.push({
+        key:i,
+        brand:(item.productInfo).split("/")[0],
+        saleNumber:item.count,
+        summaryPrice:'￥'+(item.price)*item.count
+      });
+    })
     const columns = [
       { title: '品牌', dataIndex: 'brand', key: 'brand' },
       { title: '售出台数', dataIndex: 'saleNumber', key: 'saleNumber' },
       { title: '总价格', dataIndex: 'summaryPrice', key: 'summaryPrice' },
     ];
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        brand: '小米',
-        saleNumber: 2,
-        summaryPrice: 10000,
-      });
-    }
     return (
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={arrList}
         pagination={false}
       />
     );
   };
 
-
-
-
   render() {
+    let { sortedInfo, filteredInfo } = this.state;
+    sortedInfo = sortedInfo || {};
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      filterDropdown: (
-        <div className="custom-filter-dropdown">
-          <Input
-            ref={ele => this.searchInput = ele}
-            placeholder="Search name"
-            value={this.state.searchText}
-            onChange={this.onInputChange}
-            onPressEnter={this.onSearch}
-          />
-          <Button type="primary" onClick={this.onSearch}>Search</Button>
-        </div>
-      ),
-      filterIcon: <Icon type="smile-o" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-      filterDropdownVisible: this.state.filterDropdownVisible,
-      onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }, () => this.searchInput.focus()),
     }, {
       title: '所属门店',
       dataIndex: 'region',
@@ -150,6 +121,7 @@ expandedRowRender = () => {
       title: '销售台数',
       dataIndex: 'saleNumber',
       key: 'saleNumber',
+      sorter: (a, b) => a.saleNumber - b.saleNumber,
     }, {
       title: '排行',
       dataIndex: 'ranking',
@@ -166,7 +138,7 @@ expandedRowRender = () => {
 	    				bordered
 	    				columns={columns} 
 	    				expandedRowRender={this.expandedRowRender}
-	    				dataSource={this.state.data}
+	    				dataSource={this.state.arrTotal}
 	    			    title={() => '本月员工销售排行'} />
 	    		</div>
 	    	</div>
